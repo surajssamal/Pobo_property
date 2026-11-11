@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# POBO Premium Properties CRM
 
-## Getting Started
+A luxury real estate customer enquiry capture & Area Ambassador pipeline CRM system built with Next.js 14 (App Router), Tailwind CSS, and Supabase.
 
-First, run the development server:
+---
+
+## 🚀 Deploying to Vercel
+
+### Step 1: Push Code to GitHub / GitLab / Bitbucket
+Ensure your repository is pushed to your Git provider.
+
+### Step 2: Import into Vercel
+1. Log in to [Vercel](https://vercel.com) and click **"Add New Project"**.
+2. Select your repository.
+3. Framework Preset will automatically detect **Next.js**.
+4. Root Directory should be `./` (the root).
+
+### Step 3: Configure Environment Variables in Vercel
+In the Vercel project configuration screen, open the **Environment Variables** section and add the following 3 variables:
+
+| Variable Name | Description | Example / Notes |
+|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL | `https://xxxx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Anon Public API Key | `eyJhbGciOi...` |
+| `ADMIN_INVITE_CODE` | Secret passphrase to register Admin accounts | `POBO_ADMIN_2026` (Never expose via `NEXT_PUBLIC_`) |
+
+> **Security Note:** `ADMIN_INVITE_CODE` runs strictly on the server (`/api/admin/verify-invite`) and is never leaked to the client browser.
+
+### Step 4: Database Setup (Supabase)
+Before testing live signups or forms, execute the full schema in your Supabase SQL Editor:
+- Run the contents of [`supabase_schema.sql`](./supabase_schema.sql).
+
+---
+
+## 🛠️ Local Development
 
 ```bash
+# 1. Install dependencies
+npm install
+
+# 2. Setup your local environment variables
+cp .env.example .env.local
+# Fill in NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, and ADMIN_INVITE_CODE
+
+# 3. Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧭 Application Routes
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/` — Customer Enquiry form with Indian states dropdown, budget tiers, and phone duplication handling.
+- `/admin/login` — Administrator authentication (requires `ADMIN_INVITE_CODE` for signups).
+- `/admin` — Admin CRM dashboard (lead assignments, status updates, analytics).
+- `/worker/login` — Area Ambassador authentication.
+- `/worker` — Area Ambassador portal with strict lead isolation.
+- `/api/admin/verify-invite` — Serverless API route verifying admin invite passphrases.
